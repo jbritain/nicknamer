@@ -9,7 +9,7 @@ const devServerID = process.env.DEV_SERVER_ID // the server the bot is tested in
 var devMode = process.env.DEV_MODE // whether we are deploying commands globally or only in the testing server
 
 if (devMode == null){
-    devMode = true; // default to true if dev mode not specified
+    devMode = false; // default to false if dev mode not specified
 }
 
 // load commands from 'commands' folder
@@ -23,8 +23,6 @@ for (const file of commandFiles) {
 	commands.push(command.data.toJSON());
 }
 
-console.log(commands)
-
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
 if (devMode){
@@ -37,11 +35,11 @@ if (devMode){
         .catch(console.error);
 } else {
 
-    rest.put(Routes.applicationCommands(clientId), { body: [] }) // delete all global commands
+    rest.put(Routes.applicationCommands(clientID), { body: [] }) // delete all global commands
 	.then(() => console.log('Successfully deleted all application commands.'))
 	.catch(console.error);
 
-    rest.put(Routes.applicationGuildCommands(clientID), { body: commands }) // deploy commands to all servers
+    rest.put(Routes.applicationCommands(clientID), { body: commands }) // deploy commands to all servers
         .then((data) => console.log(`Successfully registered ${data.length} application commands.`))
         .catch(console.error);
 }
