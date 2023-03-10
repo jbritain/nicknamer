@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "discord.js": "^14.5.0",
+    "dotenv": "^16.0.2"
+  },
+  "name": "nicknamer",
+  "description": "A Discord bot for setting user nicknames.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbritain/FutureBot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jbritain/FutureBot/issues"
+  },
+  "homepage": "https://github.com/jbritain/FutureBot#readme"
+}
