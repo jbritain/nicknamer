@@ -6,5 +6,5 @@ This was necessitated by the fact that in a Discord server it is not possible to
 [![](https://img.shields.io/badge/-add%20to%20your%20server-7289da)](https://discord.com/api/oauth2/authorize?client_id=1083437536250179684&permissions=201326592&scope=bot%20applications.commands)
 
 
-<video src="./assets/demo.mp4" />
+<video autoplay src="./assets/demo.mp4" />
 
