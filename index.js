@@ -44,12 +44,17 @@ client.on('interactionCreate', async interaction => {
 		if (interaction.customId === "nicknameModal"){
 			targetUser = interaction.guild.members.cache.get(nicknameChanges[interaction.member.id])
 
+			let hasErrored = false;
+
 			await targetUser.setNickname(interaction.fields.getTextInputValue("nicknameInput")).catch(e => {
+				hasErrored = true;
 				console.error(e);
 				interaction.reply("There was an error setting the nickname");
 			});
 			
-			interaction.deferUpdate()
+			if (!hasErrored){
+				interaction.deferUpdate()
+			}
 		}
 	}
 	
