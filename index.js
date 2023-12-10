@@ -19,12 +19,22 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command);
 }
 
-let nicknameChanges = {} // if user 'JoshTheB' changes the nickname of user 'SolidStateDrive' then nicknameChanges["JoshTheB"] = "SolidStateDrive" except of course it works on Guild Member IDs
+function getTime(){
+	var today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+	return date+' '+time;
+}
+
+let nicknameChanges = {} // if user 'JoshTheB' changes the nickname of user 'Max' then nicknameChanges["JoshTheB"] = "SolidStateDrive" except of course it works on Guild Member IDs
 
 // respond to commands
 client.on('interactionCreate', async interaction => {
 	if (interaction.isUserContextMenuCommand()) {
 		if (interaction.commandName !== "Change Nickname") return;
+
+		nicknameChanges[interaction.member.id] = interaction.targetMember.id
+		targetUser = interaction.guild.members.cache.get(nicknameChanges[interaction.member.id]);
 
 		const nicknameModal = new ModalBuilder()
 			.setCustomId("nicknameModal")
@@ -34,25 +44,32 @@ client.on('interactionCreate', async interaction => {
 			.setCustomId("nicknameInput")
 			.setLabel("Please enter a nickname")
 			.setStyle(TextInputStyle.Short)
-			.setRequired(true)
+			.setRequired(false)
+			.setMaxLength(32)
+			.setValue(targetUser.nickname || targetUser.user.username)
+			.setPlaceholder(targetUser.user.username)
 
-		nicknameChanges[interaction.member.id] = interaction.targetMember.id
 		const nicknameRow = new ActionRowBuilder().addComponents(nicknameInput);
 		await nicknameModal.addComponents(nicknameRow);
 		await interaction.showModal(nicknameModal);
 	} else if (interaction.isModalSubmit()) {
 		if (interaction.customId === "nicknameModal"){
-			targetUser = interaction.guild.members.cache.get(nicknameChanges[interaction.member.id])
+			
 
 			let hasErrored = false;
+			let newNickname = interaction.fields.getTextInputValue("nicknameInput")
 
-			await targetUser.setNickname(interaction.fields.getTextInputValue("nicknameInput")).catch(e => {
+			await targetUser.setNickname(newNickname).catch(e => {
 				hasErrored = true;
 				console.error(e);
-				interaction.reply("There was an error setting the nickname");
+				interaction.reply({
+					content: `There was an error setting the nickname: \`\`\`${e.message}\`\`\``,
+					ephemeral: true
+				});
 			});
 			
 			if (!hasErrored){
+				console.log(`[${getTime()}] User '@${interaction.user.username}' updated the username of '@${targetUser.user.username}' to '${newNickname}'`)
 				interaction.deferUpdate()
 			}
 		}
