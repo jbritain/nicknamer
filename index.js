@@ -69,7 +69,7 @@ client.on('interactionCreate', async interaction => {
 			});
 			
 			if (!hasErrored){
-				console.log(`[${getTime()}] User '@${interaction.user.username}' updated the username of '@${targetUser.user.username}' to '${newNickname}'`)
+				console.log(`[${getTime()}] User '@${interaction.user.username}' updated the username of '@${targetUser.user.username}' to '${newNickname}' in server '${interaction.guild.name}'`)
 				interaction.deferUpdate()
 			}
 		}
